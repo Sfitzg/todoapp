@@ -45,15 +45,17 @@
           <h2>Add New Task</h2>
         </div>
         <div class="modal__body">
-          <form>
-            <label for="taskName">Task Name:</label>
-            <input id="taskName" type="text" placeholder="Task Name" required />
+          <form id="taskForm" onsubmit="createTask(event)">
+            <label for="taskTitle">Task Title:</label>
+            <input
+              id="taskTitle"
+              type="text"
+              placeholder="Enter title"
+              required
+            />
             <br />
-            <label for="taskDescription">Task Description:</label>
-            <textarea
-              id="taskDescription"
-              placeholder="Description..."
-            ></textarea>
+            <label for="taskDetails">Task Details:</label>
+            <textarea id="taskDetails" placeholder="Add Details"></textarea>
             <br />
             <label for="taskDueDate">Due date:</label>
             <input id="taskDueDate" type="date" />
