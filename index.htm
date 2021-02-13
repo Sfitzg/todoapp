@@ -63,7 +63,12 @@
             <label for="taskDueTime">Due Time:</label>
             <input id="taskDueTime" type="time" />
             <br />
-            <input class="btn btn-danger" type="button" value="Cancel" />
+            <input
+              onclick="toggleModal()"
+              class="btn btn-danger"
+              type="reset"
+              value="Cancel"
+            />
             <input class="btn btn-primary" type="submit" value="Add Task" />
           </form>
         </div>

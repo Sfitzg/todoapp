@@ -6,7 +6,7 @@ let idCounter = 0;
 //CLASS FOR TASK
 class Task {
   constructor(title, details = null, dueDate = null, dueTime = null) {
-    this.id = ++idCounter;
+    this.id = idCounter++;
     this.title = title;
     this.details = details;
     this.dueDate = dueDate;
@@ -29,15 +29,21 @@ function createTask(event) {
     // Add to localStorage
     addToLocalStorage(tasks);
     // Clear Input form -- STILL TO ADD
+    document.getElementById('taskForm').reset();
+    // Close Modal
+    toggleModal();
   }
 }
 
 // FUNCTION TO ADD TASKS TO LOCALSTORAGE
 function addToLocalStorage(tasks) {
   // conver the array to string.
-  jsonString = JSON.stringify(tasks);
+  jsonIdCounterString = JSON.stringify(idCounter);
+  jsonTasksString = JSON.stringify(tasks);
   // save to localStorage
-  localStorage.setItem('tasks', jsonString);
+  localStorage.setItem('tasks', jsonTasksString);
+  localStorage.setItem('idCounter', jsonIdCounterString);
+
   renderTasks(tasks);
 }
 
@@ -82,12 +88,14 @@ function renderTasks(tasks) {
 // FUNCTION TO GET TASKS FROM LOCALSTORAGE
 function getFromLocalStorage() {
   const data = localStorage.getItem('tasks');
-  // if reference exists
+  const idData = localStorage.getItem('idCounter');
+  // if there is data
   if (data) {
     // converts back to array and store it in tasks array
+    // Set idCounter to last used ID
+    idCounter = JSON.parse(idData);
     tasks = JSON.parse(data);
-    // SET IDCOUNTER TO LAST USED ID
-    console.log(tasks[tasks.length - 1].id);
+
     renderTasks(tasks);
   }
 }
