@@ -32,7 +32,18 @@
         <option value="">Date Created (ASC)</option>
         <option value="">Date Created (DSC)</option>
       </select>
-      <div id="tasklist" class="tasklist"></div>
+      <div id="tasklis" class="tasklist">
+        <button class="accordion">Un-complete</button>
+        <div class="accordion-panel">
+          <ul id="tasklist-uncomplete" class="tasklist"></ul>
+        </div>
+
+        <button class="accordion">Completed (1)</button>
+        <div class="accordion-panel">
+          <ul id="tasklist-complete" class="tasklist"></ul>
+        </div>
+      </div>
+      <ul id="tasklist"></ul>
     </main>
 
     <input

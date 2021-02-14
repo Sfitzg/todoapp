@@ -49,15 +49,11 @@ function addToLocalStorage(tasks) {
 
 // FUNCTION TO READ TASKS TO SCREEN
 function renderTasks(tasks) {
-  let taskList = document.getElementById('tasklist');
+  let uncompleteList = document.getElementById('tasklist-uncomplete');
+  let completedList = document.getElementById('tasklist-complete');
   // clear taskList
-  taskList.innerHTML = '';
-  // CREATE COMPLETED LIST AND UNCOMPLETE LIST
-  const uncompleteList = document.createElement('ul');
-  const completedList = document.createElement('ul');
-
-  taskList.appendChild(uncompleteList);
-  taskList.appendChild(completedList);
+  uncompleteList.innerHTML = '';
+  completedList.innerHTML = '';
 
   // Loop through each task in tasks Array
   for (task of tasks) {
@@ -123,13 +119,12 @@ function renderTasks(tasks) {
     listItem.appendChild(topDiv);
     listItem.appendChild(bottomDiv);
 
-    // UNCOMPLETE LIST
+    // ADD LIST ITEMS TO COMPLETED OR UNCOMPLETE LIST
     if (isComplete) {
       completedList.insertBefore(listItem, completedList.childNodes[0]);
     } else {
       uncompleteList.insertBefore(listItem, uncompleteList.childNodes[0]);
     }
-    // COMPLETED LIST
   }
 }
 
@@ -174,6 +169,21 @@ function toggleComplete(id) {
 // FUNCTION TOGGLE COMPLETE
 function filterTasks() {
   console.log('filter');
+}
+
+// ACCORDION TOGGLE
+function toggleAccordion(button) {
+  // TOGGLE BUTTON ACCORDION CLOSED CLASS
+  button.classList.toggle('accordion-closed');
+  // TOGGLE ACCORDION PANEL HIDDEN
+  const panel = button.nextElementSibling;
+  panel.classList.toggle('accordion-panel-hidden');
+}
+const acc = document.getElementsByClassName('accordion');
+for (button of acc) {
+  button.addEventListener('click', function () {
+    toggleAccordion(this);
+  });
 }
 
 // TOGGLE THE ADD TASK MODAL

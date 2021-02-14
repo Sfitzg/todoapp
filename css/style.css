@@ -43,7 +43,7 @@ body {
   padding: 15px;
   border-radius: 50%;
   font-size: 2rem;
-  line-height: 0px;
+  line-height: 0;
   cursor: pointer;
 }
 .add-task-button:hover {
@@ -51,6 +51,43 @@ body {
 }
 .add-task-button:focus {
   outline: none;
+}
+
+/* ACCORDION */
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: center;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+.accordion:after {
+  content: '\2796'; /* Unicode character for "minus" sign (-) */
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+.accordion-closed,
+.accordion-button:hover {
+  background-color: #ccc;
+}
+.accordion-closed:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+}
+.accordion-panel {
+  padding: 0;
+  background-color: white;
+  display: block;
+  overflow: hidden;
+}
+.accordion-panel-hidden {
+  display: none;
 }
 
 /* TASK LIST */
@@ -112,6 +149,7 @@ body {
   justify-content: flex-end;
 }
 .tasklist-item-duedate {
+  color: green;
 }
 
 /* MODAL */
