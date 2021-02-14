@@ -25,13 +25,20 @@
       <h1 class="heading">Todo APP</h1>
     </header>
     <main>
-      <ul id="taskList" class="taskList"></ul>
+      <select onChange="filterTasks()">
+        <option value="" selected disabled>Sort by:</option>
+        <option value="">Task (A-Z)</option>
+        <option value="">Task (Z-A)</option>
+        <option value="">Date Created (ASC)</option>
+        <option value="">Date Created (DSC)</option>
+      </select>
+      <div id="tasklist" class="tasklist"></div>
     </main>
 
     <input
       type="button"
       id="addTaskButton"
-      class="addtaskbutton"
+      class="add-task-button"
       value="+"
       onclick="toggleModal()"
     />
@@ -39,18 +46,19 @@
     <!-- Add Task Modal -->
     <div id="addTaskModal" class="modal">
       <!-- Modal content -->
-      <div class="modal__content">
-        <div class="modal__header">
-          <span onclick="toggleModal()" class="modal__close">&times;</span>
+      <div class="modal-content">
+        <div class="modal-header">
+          <span onclick="toggleModal()" class="modal-close">&times;</span>
           <h2>Add New Task</h2>
         </div>
-        <div class="modal__body">
+        <div class="modal-body">
           <form id="taskForm" onsubmit="createTask(event)">
             <label for="taskTitle">Task Title:</label>
             <input
               id="taskTitle"
               type="text"
               placeholder="Enter title"
+              autofocus
               required
             />
             <br />
