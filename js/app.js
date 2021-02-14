@@ -62,7 +62,7 @@ function renderTasks(tasks) {
 
     // Create Elements
     const checkBox = document.createElement('input');
-    const titleElement = document.createElement('p');
+    const checkBoxLabel = document.createElement('label');
     const titleNode = document.createTextNode(title);
     const editBtn = document.createElement('i');
     const deleteBtn = document.createElement('i');
@@ -73,6 +73,8 @@ function renderTasks(tasks) {
 
     // CHECKBOX
     checkBox.setAttribute('type', 'checkbox');
+    checkBox.classList.add('task-checkbox');
+    checkBox.setAttribute('id', 'task' + id);
     if (isComplete) {
       checkBox.setAttribute('checked', 'checked');
     }
@@ -80,11 +82,12 @@ function renderTasks(tasks) {
       toggleComplete(id);
     });
 
-    // TITLE
-    titleElement.appendChild(titleNode);
-    titleElement.classList.add('tasklist-item-title');
+    // CHECKBOX LABEL
+    checkBoxLabel.setAttribute('for', 'task' + id);
+    checkBoxLabel.appendChild(titleNode);
+    checkBoxLabel.classList.add('tasklist-item-title');
     if (isComplete) {
-      titleElement.classList.add('tasklist-item-title-checked');
+      checkBoxLabel.classList.add('tasklist-item-title-checked');
     }
 
     // EDIT BUTTON
@@ -102,7 +105,7 @@ function renderTasks(tasks) {
     // TOP DIV SECTION
     topDiv.classList.add('tasklist-item-top');
     topDiv.appendChild(checkBox);
-    topDiv.appendChild(titleElement);
+    topDiv.appendChild(checkBoxLabel);
     topDiv.appendChild(editBtn);
     topDiv.appendChild(deleteBtn);
 
