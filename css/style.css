@@ -3,12 +3,10 @@
   box-sizing: border-box;
   padding: 0;
 }
-
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: whitesmoke;
 }
-
 .heading {
   text-align: center;
   padding: 20px;
@@ -25,16 +23,13 @@ body {
 .btn:hover {
   box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
-
 .btn-primary {
   background: blue;
 }
-
 .btn-danger {
   background-color: red;
 }
-
-.addtaskbutton {
+.add-task-button {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -51,68 +46,72 @@ body {
   line-height: 0px;
   cursor: pointer;
 }
-.addtaskbutton:hover {
+.add-task-button:hover {
   box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
-.addtaskbutton:focus {
+.add-task-button:focus {
   outline: none;
 }
 
 /* TASK LIST */
 
-.taskList {
+.tasklist {
   margin-top: 5px;
   list-style-type: none;
 }
-.taskList__item {
+.tasklist-item {
   margin: 5px 0;
   padding: 20px 10px;
   text-transform: capitalize;
+}
+.tasklist-item:hover {
+  background-color: aliceblue;
+  box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
+}
+.tasklist-item:nth-child(odd) {
+  background-color: lightblue;
+}
+.tasklist-item:nth-child(even) {
+  background-color: lightgreen;
+}
+.tasklist-item-checked {
+  opacity: 0.5;
+}
+.tasklist-item-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.taskList__item:hover {
-  background-color: aliceblue;
-  box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
-}
-.taskList__item:nth-child(odd) {
-  background-color: lightblue;
-}
-.taskList__item:nth-child(even) {
-  background-color: lightgreen;
-}
-.taskList__item--checked {
-  opacity: 0.5;
-}
-.taskList__item__name {
+.tasklist-item-title {
   margin-left: 10px;
   font-size: 1rem;
 }
-.taskList__item__name--checked {
+.tasklist-item-title-checked {
   text-decoration: line-through;
 }
-.taskList__item__completeIcon {
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 1rem;
-}
-.taskList__item__completeIcon:hover {
-  color: rgb(148, 134, 134);
-}
-.taskList__item__completeIcon--checked {
-  color: green;
-}
-.taskList__item__deleteIcon {
+.tasklist-item-editbtn {
   cursor: pointer;
   margin-left: auto;
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  color: black;
+}
+.tasklist-item-deletebtn {
+  cursor: pointer;
+  margin-left: 5px;
+  text-decoration: none;
+  font-size: 1.3rem;
   color: rgb(202, 17, 17);
 }
-.taskList__item__deleteIcon:hover {
-  font-size: 1.6rem;
+.tasklist-item-deletebtn:hover,
+.tasklist-item-editbtn:hover {
   color: rgb(148, 134, 134);
+}
+.tasklist-item-bottom {
+  display: flex;
+  justify-content: flex-end;
+}
+.tasklist-item-duedate {
 }
 
 /* MODAL */
@@ -127,12 +126,10 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
 }
-
-.modal--show {
+.modal-show {
   display: block;
 }
-
-.modal__content {
+.modal-content {
   position: relative;
   background-color: #fefefe;
   margin-right: auto;
@@ -145,21 +142,18 @@ body {
   animation-name: slideFromBottom;
   animation-duration: 0.4s;
 }
-
-.modal__close {
+.modal-close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
-
-.modal__close:hover,
-.modal__close:focus {
+.modal-close:hover,
+.modal-close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
 }
-
 /* Add Animation */
 @keyframes slideFromBottom {
   from {

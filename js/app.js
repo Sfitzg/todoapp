@@ -49,39 +49,87 @@ function addToLocalStorage(tasks) {
 
 // FUNCTION TO READ TASKS TO SCREEN
 function renderTasks(tasks) {
-  let taskList = document.getElementById('taskList');
+  let taskList = document.getElementById('tasklist');
   // clear taskList
   taskList.innerHTML = '';
+  // CREATE COMPLETED LIST AND UNCOMPLETE LIST
+  const uncompleteList = document.createElement('ul');
+  const completedList = document.createElement('ul');
+
+  taskList.appendChild(uncompleteList);
+  taskList.appendChild(completedList);
 
   // Loop through each task in tasks Array
   for (task of tasks) {
     // Destructure the task properties
-    const { id, title, isComplete } = task;
+    const { id, title, isComplete, dueDate } = task;
 
-    const li = document.createElement('LI');
-    const h2 = document.createElement('H2');
-    const completeIcon = document.createElement('I');
-    const deleteIcon = document.createElement('I');
-    const text = document.createTextNode(title);
+    // Create Elements
+    const checkBox = document.createElement('input');
+    const titleElement = document.createElement('p');
+    const titleNode = document.createTextNode(title);
+    const editBtn = document.createElement('i');
+    const deleteBtn = document.createElement('i');
+    const dueDateNode = document.createTextNode(dueDate);
+    const topDiv = document.createElement('div');
+    const bottomDiv = document.createElement('div');
+    const listItem = document.createElement('li');
+
+    // CHECKBOX
+    checkBox.setAttribute('type', 'checkbox');
     if (isComplete) {
-      li.className = 'taskList__item taskList__item--checked';
-      h2.className = 'taskList__item__name taskList__item__name--checked';
-      completeIcon.className =
-        'taskList__item__completeIcon taskList__item__completeIcon--checked far fa-check-circle';
-    } else {
-      li.setAttribute('id', id);
-      li.className = 'taskList__item';
-      h2.className = 'taskList__item__name';
-      completeIcon.className = 'taskList__item__completeIcon far fa-circle';
+      checkBox.setAttribute('checked', 'checked');
     }
-    deleteIcon.className = 'taskList__item__deleteIcon far fa-trash-alt';
-    deleteIcon.setAttribute('onclick', 'deleteTask(event)');
-    h2.appendChild(text);
-    li.appendChild(completeIcon);
-    li.appendChild(h2);
-    li.appendChild(deleteIcon);
+    checkBox.addEventListener('click', function () {
+      toggleComplete(id);
+    });
 
-    taskList.insertBefore(li, taskList.childNodes[0]);
+    // TITLE
+    titleElement.appendChild(titleNode);
+    titleElement.classList.add('tasklist-item-title');
+    if (isComplete) {
+      titleElement.classList.add('tasklist-item-title-checked');
+    }
+
+    // EDIT BUTTON
+    editBtn.classList.add('far', 'fa-edit');
+    editBtn.classList.add('tasklist-item-editbtn');
+
+    // DELETE BUTTON
+    deleteBtn.classList.add('far', 'fa-trash-alt');
+    deleteBtn.classList.add('tasklist-item-deletebtn');
+    deleteBtn.addEventListener('click', function () {
+      deleteTask(id);
+    });
+    // DUE DATE
+
+    // TOP DIV SECTION
+    topDiv.classList.add('tasklist-item-top');
+    topDiv.appendChild(checkBox);
+    topDiv.appendChild(titleElement);
+    topDiv.appendChild(editBtn);
+    topDiv.appendChild(deleteBtn);
+
+    // BOTTOM DIV SECTION
+    bottomDiv.classList.add('tasklist-item-bottom');
+    bottomDiv.appendChild(dueDateNode);
+
+    // LIST ITEM
+    listItem.className = 'tasklist-item';
+    listItem.setAttribute('data-id', id);
+    if (isComplete) {
+      listItem.classList.add('tasklist-item-checked');
+    }
+    listItem.appendChild(topDiv);
+    listItem.appendChild(bottomDiv);
+
+    // UNCOMPLETE LIST
+    if (isComplete) {
+      completedList.insertBefore(listItem, completedList.childNodes[0]);
+    } else {
+      uncompleteList.insertBefore(listItem, uncompleteList.childNodes[0]);
+    }
+    // COMPLETED LIST
   }
 }
 
@@ -103,8 +151,7 @@ function getFromLocalStorage() {
 getFromLocalStorage();
 
 // FUNCTION TO DELETE TASKS
-function deleteTask(event) {
-  const id = event.target.parentElement.id;
+function deleteTask(id) {
   tasks = tasks.filter((x) => {
     return x.id != id;
   });
@@ -112,16 +159,33 @@ function deleteTask(event) {
   addToLocalStorage(tasks);
 }
 
+// FUNCTION TOGGLE COMPLETE
+function toggleComplete(id) {
+  tasks = tasks.map((item) => {
+    if (item.id == id) {
+      item.isComplete = !item.isComplete;
+    }
+    return item;
+  });
+  // update the localStorage
+  addToLocalStorage(tasks);
+}
+
+// FUNCTION TOGGLE COMPLETE
+function filterTasks() {
+  console.log('filter');
+}
+
 // TOGGLE THE ADD TASK MODAL
-function toggleModal() {
+function toggleModal(type) {
   const modal = document.getElementById('addTaskModal');
-  modal.classList.toggle('modal--show');
+  modal.classList.toggle('modal-show');
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   const modal = document.getElementById('addTaskModal');
   if (event.target == modal) {
-    modal.classList.toggle('modal--show');
+    modal.classList.toggle('modal-show');
   }
 };
