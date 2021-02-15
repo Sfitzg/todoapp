@@ -53,44 +53,6 @@ body {
   outline: none;
 }
 
-/* INPUTS */
-
-.task-checkbox {
-  display: none;
-}
-.task-checkbox + label {
-  position: relative;
-}
-.task-checkbox + label::before {
-  font-family: 'Font Awesome 5 free';
-  color: green;
-  content: '\f058';
-  cursor: pointer;
-  position: absolute;
-  left: -24px;
-  top: 2px;
-
-  transform: scale(0) rotateZ(180deg);
-  transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
-}
-.task-checkbox + label:hover::before {
-  transform: scale(1) rotateZ(0deg);
-  font-weight: 600;
-}
-.task-checkbox + input[type='checkbox']:checked + label::before {
-  transform: scale(1) rotateZ(0deg);
-  font-weight: 600;
-}
-.task-checkbox + label::after {
-  font-family: 'Font Awesome 5 free';
-  color: green;
-  content: '\f111';
-  cursor: pointer;
-  position: absolute;
-  left: -24px;
-  top: 2px;
-}
-
 /* ACCORDION */
 
 .accordion {
@@ -157,13 +119,46 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-.tasklist-item-title {
+.tasklist-item-checkbox {
+  display: none;
+}
+.tasklist-item-checkbox-label {
+  position: relative;
   margin-left: 1.5rem;
   font-size: 1rem;
   width: 100%;
 }
-.tasklist-item-title-checked {
+.tasklist-item-checkbox-label-checked {
   text-decoration: line-through;
+}
+.tasklist-item-checkbox-label::before {
+  font-family: 'Font Awesome 5 free';
+  color: green;
+  content: '\f058';
+  cursor: pointer;
+  position: absolute;
+  left: -24px;
+  top: 2px;
+
+  transform: scale(0) rotateZ(180deg);
+  transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
+}
+.tasklist-item-checkbox-label:hover::before {
+  transform: scale(1) rotateZ(0deg);
+  font-weight: 600;
+}
+input[type='checkbox']:checked + .tasklist-item-checkbox-label::before {
+  transform: scale(1) rotateZ(0deg);
+  font-weight: 600;
+}
+.tasklist-item-checkbox-label::after {
+  font-family: 'Font Awesome 5 free';
+  color: green;
+  content: '\f111';
+  cursor: pointer;
+  position: absolute;
+  left: -24px;
+  top: 2px;
 }
 .tasklist-item-editbtn {
   cursor: pointer;

@@ -73,7 +73,7 @@ function renderTasks(tasks) {
 
     // CHECKBOX
     checkBox.setAttribute('type', 'checkbox');
-    checkBox.classList.add('task-checkbox');
+    checkBox.classList.add('tasklist-item-checkbox');
     checkBox.setAttribute('id', 'task' + id);
     if (isComplete) {
       checkBox.setAttribute('checked', 'checked');
@@ -85,9 +85,9 @@ function renderTasks(tasks) {
     // CHECKBOX LABEL
     checkBoxLabel.setAttribute('for', 'task' + id);
     checkBoxLabel.appendChild(titleNode);
-    checkBoxLabel.classList.add('tasklist-item-title');
+    checkBoxLabel.classList.add('tasklist-item-checkbox-label');
     if (isComplete) {
-      checkBoxLabel.classList.add('tasklist-item-title-checked');
+      checkBoxLabel.classList.add('tasklist-item-checkbox-label-checked');
     }
 
     // EDIT BUTTON
@@ -140,7 +140,13 @@ function getFromLocalStorage() {
     // converts back to array and store it in tasks array
     // Set idCounter to last used ID
     idCounter = JSON.parse(idData);
-    tasks = JSON.parse(data);
+    tasks = JSON.parse(data, function (key, value) {
+      if (key == 'dueDate') {
+        return new Date(value);
+      } else {
+        return value;
+      }
+    });
 
     renderTasks(tasks);
   }
