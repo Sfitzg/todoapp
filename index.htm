@@ -38,14 +38,19 @@
       </div>
 
       <div>
-        <button class="accordion">Un-complete</button>
+        <button id="accordion-incomplete-heading" class="accordion">
+          Uncompleted Tasks
+        </button>
         <div class="accordion-panel">
-          <ul id="tasklist-uncomplete" class="tasklist"></ul>
+          <ul id="tasklist-incomplete" class="tasklist"></ul>
         </div>
 
-        <button class="accordion">Completed (1)</button>
-        <div class="accordion-panel">
-          <ul id="tasklist-complete" class="tasklist"></ul>
+        <button
+          id="accordion-completed-heading"
+          class="accordion accordion-closed"
+        ></button>
+        <div class="accordion-panel accordion-panel-hidden">
+          <ul id="tasklist-completed" class="tasklist"></ul>
         </div>
       </div>
     </main>

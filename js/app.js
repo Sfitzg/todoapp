@@ -57,10 +57,12 @@ function addToLocalStorage(tasks) {
 
 // FUNCTION TO READ TASKS TO SCREEN
 function renderTasks(tasks) {
-  let uncompleteList = document.getElementById('tasklist-uncomplete');
-  let completedList = document.getElementById('tasklist-complete');
+  let incompleteList = document.getElementById('tasklist-incomplete');
+  let completedList = document.getElementById('tasklist-completed');
+  let incompleteTasks = 0;
+  let completedTasks = 0;
   // clear taskList
-  uncompleteList.innerHTML = '';
+  incompleteList.innerHTML = '';
   completedList.innerHTML = '';
 
   // Loop through each task in tasks Array
@@ -133,12 +135,24 @@ function renderTasks(tasks) {
     listItem.appendChild(bottomDiv);
 
     // ADD LIST ITEMS TO COMPLETED OR UNCOMPLETE LIST
+
     if (isComplete) {
       completedList.insertBefore(listItem, completedList.childNodes[0]);
+      completedTasks += 1;
     } else {
-      uncompleteList.insertBefore(listItem, uncompleteList.childNodes[0]);
+      incompleteList.insertBefore(listItem, incompleteList.childNodes[0]);
+      incompleteTasks += 1;
     }
   }
+
+  const accordionCompletedHeading = document.getElementById(
+    'accordion-completed-heading'
+  );
+  accordionCompletedHeading.innerHTML = '';
+  const accordioncCompletedText = document.createTextNode(
+    `Completed Tasks (${completedTasks})`
+  );
+  accordionCompletedHeading.appendChild(accordioncCompletedText);
 }
 
 // FUNCTION TO GET TASKS FROM LOCALSTORAGE
