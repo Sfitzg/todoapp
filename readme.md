@@ -2,9 +2,9 @@
 
 > its an awesome little todo app.
 
-[![NPM Version][npm-image]][npm-url]
+<!-- [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
+[![Downloads Stats][npm-downloads]][npm-url] -->
 
 One to two paragraph statement about your product and what it does.
 
@@ -14,7 +14,7 @@ One to two paragraph statement about your product and what it does.
 
 OS X & Linux:
 
-```sh
+<!-- ```sh
 npm install my-crazy-module --save
 ```
 
@@ -22,7 +22,7 @@ Windows:
 
 ```sh
 edit autoexec.bat
-```
+``` -->
 
 ## Usage example
 
@@ -46,7 +46,7 @@ npm test
 
 ## Meta
 
-Shaun Fitzgibbon – [@YourTwitter](https://twitter.com/dbader_org) – shaun@fitzindustries.com
+Shaun Fitzgibbon – [@poodlewhat](https://twitter.com/poodlewhat) – shaun@fitzindustries.com
 
 Distributed under the XYZ license. See `LICENSE` for more information.
 
@@ -54,7 +54,7 @@ Distributed under the XYZ license. See `LICENSE` for more information.
 
 ## Contributing
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
+1. Fork it (<https://github.com/Sfitzg/todoapp/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
