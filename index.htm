@@ -25,13 +25,18 @@
       <h1 class="heading">Todo APP</h1>
     </header>
     <main>
-      <select onChange="filterTasks()">
-        <option value="" selected disabled>Sort by:</option>
-        <option value="">Task (A-Z)</option>
-        <option value="">Task (Z-A)</option>
-        <option value="">Date Created (ASC)</option>
-        <option value="">Date Created (DSC)</option>
-      </select>
+      <div class="form-group">
+        <select class="form-select" value="" onChange="filterTasks()">
+          <option value="" selected disabled></option>
+          <option value="1">Task (A-Z)</option>
+          <option value="2">Task (Z-A)</option>
+          <option value="3">Date Created (ASC)</option>
+          <option value="4">Date Created (DSC)</option>
+        </select>
+        <span class="highlight"></span>
+        <label class="form-label">Sort by</label>
+      </div>
+
       <div>
         <button class="accordion">Un-complete</button>
         <div class="accordion-panel">
@@ -59,28 +64,56 @@
       <div class="modal-content">
         <div class="modal-header">
           <span onclick="toggleModal()" class="modal-close">&times;</span>
-          <h2>Add New Task</h2>
+          <h2 class="form-header">Add New Task</h2>
         </div>
         <div class="modal-body">
           <form id="taskForm" onsubmit="createTask(event)">
-            <label for="taskTitle">Task Title:</label>
-            <input
-              id="taskTitle"
-              type="text"
-              placeholder="Enter title"
-              autofocus
-              required
-            />
-            <br />
-            <label for="taskDetails">Task Details:</label>
-            <textarea id="taskDetails" placeholder="Add Details"></textarea>
-            <br />
-            <label for="taskDueDate">Due date:</label>
-            <input id="taskDueDate" type="date" />
-            <br />
-            <label for="taskDueTime">Due Time:</label>
-            <input id="taskDueTime" type="time" />
-            <br />
+            <div class="form-group">
+              <input
+                class="form-control"
+                id="taskTitle"
+                type="text"
+                placeholder="&nbsp"
+                required
+              />
+              <span class="highlight"></span>
+              <label class="form-label" for="taskTitle">Task Title</label>
+            </div>
+
+            <div class="form-group">
+              <textarea
+                class="form-control form-textarea"
+                id="taskDetails"
+                placeholder="&nbsp"
+              ></textarea>
+              <span class="highlight"></span>
+              <label class="form-label" for="taskDetails">Task Details</label>
+            </div>
+
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="text"
+                onclick="(this.type='date')"
+                id="taskDueDate"
+                placeholder="&nbsp"
+              />
+              <span class="highlight"></span>
+              <label class="form-label" for="taskDueDate">Due date</label>
+            </div>
+
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="text"
+                onclick="(this.type='time')"
+                id="taskDueTime"
+                placeholder="&nbsp"
+              />
+              <span class="highlight"></span>
+              <label class="form-label" for="taskDueTime">Due Time</label>
+            </div>
+
             <input
               onclick="toggleModal()"
               class="btn btn-danger"

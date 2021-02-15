@@ -13,6 +13,152 @@ body {
   border-bottom: 1px solid grey;
 }
 
+/* FORM INPUTS */
+.form-header{
+  text-align: center;
+}
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+.form-control,
+.form-select {
+  font-size: 14px;
+  padding: 4px 4px;
+  display: block;
+  width: 100%;
+  height: 50px;
+  background-color: transparent;
+  border: 1px solid lightgray;
+}
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+}
+.form-label {
+  color: black
+  font-size: 14px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 5px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+.form-control:focus ~ .form-label,
+.form-control:not(:placeholder-shown) ~ .form-label {
+  top: -18px;
+  font-size: 14px;
+  color: #999;
+}
+.form-select:focus ~ .form-label,
+.form-select:not([value='']):valid ~ .form-label {
+  top: -18px;
+  font-size: 14px;
+  color: #999;
+}
+/* active state */
+.form-control:focus ~ .bar:before,
+.form-control:focus ~ .bar:after,
+.form-select:focus ~ .bar:before,
+.form-select:focus ~ .bar:after {
+  width: 50%;
+}
+.form-textarea {
+  height: 8em;
+  min-height: 30px;
+  max-height: 260px;
+  overflow: hidden;
+  overflow-x: hidden;
+}
+/* highlighter */
+.highlight {
+  position: absolute;
+  height: 50%;
+  width: 100%;
+  top: 15%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+/* active state */
+.form-control:focus ~ .highlight,
+.form--select:focus ~ .highlight {
+  -webkit-animation: inputHighlighter 0.3s ease;
+  -moz-animation: inputHighlighter 0.3s ease;
+  animation: inputHighlighter 0.3s ease;
+}
+/* animation */
+@-webkit-keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+@-moz-keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+@keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+.form-check-input {
+  display: none;
+}
+.form-check-label {
+  position: relative;
+  margin-left: 1.5rem;
+  font-size: 1rem;
+  width: 100%;
+}
+.form-check-label-checked {
+  text-decoration: line-through;
+}
+.form-check-label::before {
+  font-family: 'Font Awesome 5 free';
+  color: green;
+  content: '\f058';
+  cursor: pointer;
+  position: absolute;
+  left: -24px;
+  top: 2px;
+  transform: scale(0) rotateZ(180deg);
+  transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
+}
+.form-check-label:hover::before {
+  transform: scale(1) rotateZ(0deg);
+  font-weight: 600;
+}
+input[type='checkbox']:checked + .form-check-label::before {
+  transform: scale(1) rotateZ(0deg);
+  font-weight: 600;
+}
+.form-check-label::after {
+  font-family: 'Font Awesome 5 free';
+  color: green;
+  content: '\f111';
+  cursor: pointer;
+  position: absolute;
+  left: -24px;
+  top: 2px;
+}
+
 /* BUTTONS */
 
 .btn {
@@ -119,47 +265,6 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-.tasklist-item-checkbox {
-  display: none;
-}
-.tasklist-item-checkbox-label {
-  position: relative;
-  margin-left: 1.5rem;
-  font-size: 1rem;
-  width: 100%;
-}
-.tasklist-item-checkbox-label-checked {
-  text-decoration: line-through;
-}
-.tasklist-item-checkbox-label::before {
-  font-family: 'Font Awesome 5 free';
-  color: green;
-  content: '\f058';
-  cursor: pointer;
-  position: absolute;
-  left: -24px;
-  top: 2px;
-
-  transform: scale(0) rotateZ(180deg);
-  transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
-}
-.tasklist-item-checkbox-label:hover::before {
-  transform: scale(1) rotateZ(0deg);
-  font-weight: 600;
-}
-input[type='checkbox']:checked + .tasklist-item-checkbox-label::before {
-  transform: scale(1) rotateZ(0deg);
-  font-weight: 600;
-}
-.tasklist-item-checkbox-label::after {
-  font-family: 'Font Awesome 5 free';
-  color: green;
-  content: '\f111';
-  cursor: pointer;
-  position: absolute;
-  left: -24px;
-  top: 2px;
-}
 .tasklist-item-editbtn {
   cursor: pointer;
   margin-left: auto;
@@ -204,15 +309,15 @@ input[type='checkbox']:checked + .tasklist-item-checkbox-label::before {
 .modal-content {
   position: relative;
   background-color: #fefefe;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 30%;
-  margin-bottom: 0;
+  width: 80%;
+  margin: 20% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
   animation-name: slideFromBottom;
   animation-duration: 0.4s;
+}
+.modal-body {
+  margin-top: 1.5em;
 }
 .modal-close {
   color: #aaa;
@@ -226,14 +331,20 @@ input[type='checkbox']:checked + .tasklist-item-checkbox-label::before {
   text-decoration: none;
   cursor: pointer;
 }
+
+@media only screen and (min-width: 768px) {
+  .modal-content {
+    width: 60%;
+  }
+}
 /* Add Animation */
 @keyframes slideFromBottom {
   from {
-    bottom: -300px;
+    bottom: -100%;
     opacity: 0;
   }
   to {
-    bottom: 0;
+    bottom: 0px;
     opacity: 1;
   }
 }
