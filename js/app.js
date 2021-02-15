@@ -10,6 +10,7 @@ class Task {
     this.title = title;
     this.details = details;
     this.dueDate = dueDate;
+    this.createdDate = new Date();
     this.isComplete = false;
   }
 }
@@ -19,7 +20,14 @@ function createTask(event) {
   event.preventDefault();
   const title = event.target['taskTitle'].value;
   const details = event.target['taskDetails'].value;
-  const dueDate = new Date(event.target['taskDueDate'].value);
+  let dueDate = event.target['taskDueDate'].value;
+
+  if (dueDate != '') {
+    dueDate = new Date(dueDate);
+  } else {
+    dueDate = null;
+  }
+
   //if title is not empty
   if (title != '') {
     //create new task instance
@@ -73,7 +81,7 @@ function renderTasks(tasks) {
 
     // CHECKBOX
     checkBox.setAttribute('type', 'checkbox');
-    checkBox.classList.add('tasklist-item-checkbox');
+    checkBox.classList.add('form-check-input');
     checkBox.setAttribute('id', 'task' + id);
     if (isComplete) {
       checkBox.setAttribute('checked', 'checked');
@@ -85,9 +93,9 @@ function renderTasks(tasks) {
     // CHECKBOX LABEL
     checkBoxLabel.setAttribute('for', 'task' + id);
     checkBoxLabel.appendChild(titleNode);
-    checkBoxLabel.classList.add('tasklist-item-checkbox-label');
+    checkBoxLabel.classList.add('form-check-label');
     if (isComplete) {
-      checkBoxLabel.classList.add('tasklist-item-checkbox-label-checked');
+      checkBoxLabel.classList.add('form-check-label-checked');
     }
 
     // EDIT BUTTON
@@ -111,7 +119,9 @@ function renderTasks(tasks) {
 
     // BOTTOM DIV SECTION
     bottomDiv.classList.add('tasklist-item-bottom');
-    bottomDiv.appendChild(dueDateNode);
+    if (dueDate) {
+      bottomDiv.appendChild(dueDateNode);
+    }
 
     // LIST ITEM
     listItem.className = 'tasklist-item';
@@ -141,7 +151,7 @@ function getFromLocalStorage() {
     // Set idCounter to last used ID
     idCounter = JSON.parse(idData);
     tasks = JSON.parse(data, function (key, value) {
-      if (key == 'dueDate') {
+      if (key == 'dueDate' && value != null) {
         return new Date(value);
       } else {
         return value;
