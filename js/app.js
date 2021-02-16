@@ -200,8 +200,28 @@ function toggleComplete(id) {
 }
 
 // FUNCTION TOGGLE COMPLETE
-function filterTasks() {
-  console.log('filter');
+function filterTasks(value) {
+  switch (value) {
+    case '1':
+      tasks = tasks.sort((a, b) =>
+        a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1
+      );
+      break;
+    case '2':
+      tasks = tasks.sort((a, b) =>
+        a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1
+      );
+      break;
+    case '3':
+      tasks = tasks.sort((a, b) => (a.createdDate > b.createdDate ? 1 : -1));
+      break;
+    case '4':
+      tasks = tasks.sort((a, b) => (a.createdDate < b.createdDate ? 1 : -1));
+      break;
+    default:
+      break;
+  }
+  addToLocalStorage(tasks);
 }
 
 // ACCORDION TOGGLE

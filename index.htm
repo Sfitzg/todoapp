@@ -26,12 +26,12 @@
     </header>
     <main>
       <div class="form-group">
-        <select class="form-select" value="" onChange="filterTasks()">
+        <select class="form-select" value="" onChange="filterTasks(value)">
           <option value="" selected disabled></option>
           <option value="1">Task (A-Z)</option>
           <option value="2">Task (Z-A)</option>
-          <option value="3">Date Created (ASC)</option>
-          <option value="4">Date Created (DSC)</option>
+          <option value="3">Date Created (Newest to Oldest)</option>
+          <option value="4">Date Created (Oldest to Newest)</option>
         </select>
         <span class="highlight"></span>
         <label class="form-label">Sort by</label>
