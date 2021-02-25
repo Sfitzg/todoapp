@@ -21,20 +21,27 @@
     <title>Todo APP</title>
   </head>
   <body>
-    <header>
+    <header class="header">
       <h1 class="heading">Todo APP</h1>
+      <p id="date-today" class="date"></p>
     </header>
     <main>
-      <div class="form-group">
-        <select class="form-select" value="" onChange="filterTasks(value)">
-          <option value="" selected disabled></option>
-          <option value="1">Task (A-Z)</option>
-          <option value="2">Task (Z-A)</option>
-          <option value="3">Date Created (Newest to Oldest)</option>
-          <option value="4">Date Created (Oldest to Newest)</option>
-        </select>
-        <span class="highlight"></span>
-        <label class="form-label">Sort by</label>
+      <div class="sort-filter">
+        <div class="form-group">
+          <select
+            class="form-select"
+            value=""
+            onChange="todo.filterTasks(value)"
+          >
+            <option value="" selected disabled></option>
+            <option value="1">Task (A-Z)</option>
+            <option value="2">Task (Z-A)</option>
+            <option value="3">Date Created (Newest to Oldest)</option>
+            <option value="4">Date Created (Oldest to Newest)</option>
+          </select>
+          <span class="highlight"></span>
+          <label class="form-label">Sort by</label>
+        </div>
       </div>
 
       <div>
@@ -72,7 +79,7 @@
           <h2 class="form-header">Add New Task</h2>
         </div>
         <div class="modal-body">
-          <form id="taskForm" onsubmit="createTask(event)">
+          <form id="taskForm" onsubmit="todo.addTask(event)">
             <div class="form-group">
               <input
                 class="form-control"

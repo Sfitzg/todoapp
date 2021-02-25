@@ -7,11 +7,31 @@ body {
   font-family: 'Montserrat', sans-serif;
   background-color: whitesmoke;
 }
+
+.header{
+  background-color: #5264ae;
+  border-bottom: 1px solid grey;
+  margin-bottom: 20px;
+  height: 20vh;
+}
+
 .heading {
   text-align: center;
   padding: 20px;
-  border-bottom: 1px solid grey;
 }
+
+.date{
+  color:white;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.sort-filter{
+  float: right;
+  width: 20%;
+  margin-right: 5%;
+}
+
 
 /* FORM INPUTS */
 .form-header{

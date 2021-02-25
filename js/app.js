@@ -1,12 +1,7 @@
-// array which stores all the tasks
-let tasks = [];
-// id counter
-let idCounter = 0;
-
-//CLASS FOR TASK
+// CLASS FOR TASK
 class Task {
-  constructor(title, details = null, dueDate = null, dueTime = null) {
-    this.id = idCounter++;
+  constructor(title, details = null, dueDate = null) {
+    this.id = new Date();
     this.title = title;
     this.details = details;
     this.dueDate = dueDate;
@@ -15,214 +10,270 @@ class Task {
   }
 }
 
-// FUNCTION TO CREATE TASKS
-function createTask(event) {
-  event.preventDefault();
-  const title = event.target['taskTitle'].value;
-  const details = event.target['taskDetails'].value;
-  let dueDate = event.target['taskDueDate'].value;
-
-  if (dueDate != '') {
-    dueDate = new Date(dueDate);
-  } else {
-    dueDate = null;
+// CLASS FOR TASKLIST
+class TaskList {
+  constructor() {
+    // array which stores all the tasks
+    this.tasks = [];
+    // initially get everything from localStorage
+    this.loadFromLocalStorage();
   }
 
-  //if title is not empty
-  if (title != '') {
-    //create new task instance
-    const newTask = new Task(title, details, dueDate);
-    // Add new task instance to taskList Array
-    tasks.push(newTask);
-    // Add to localStorage
-    addToLocalStorage(tasks);
-    // Clear Input form -- STILL TO ADD
-    document.getElementById('taskForm').reset();
-    // Close Modal
-    toggleModal();
-  }
-}
+  // FUNCTION TO CREATE TASKS
+  addTask(event) {
+    event.preventDefault();
+    const title = event.target['taskTitle'].value;
+    const details = event.target['taskDetails'].value;
+    const dueTime = event.target['taskDueTime'].value;
+    let dueDate = event.target['taskDueDate'].value;
 
-// FUNCTION TO ADD TASKS TO LOCALSTORAGE
-function addToLocalStorage(tasks) {
-  // conver the array to string.
-  jsonIdCounterString = JSON.stringify(idCounter);
-  jsonTasksString = JSON.stringify(tasks);
-  // save to localStorage
-  localStorage.setItem('tasks', jsonTasksString);
-  localStorage.setItem('idCounter', jsonIdCounterString);
-
-  renderTasks(tasks);
-}
-
-// FUNCTION TO READ TASKS TO SCREEN
-function renderTasks(tasks) {
-  let incompleteList = document.getElementById('tasklist-incomplete');
-  let completedList = document.getElementById('tasklist-completed');
-  let incompleteTasks = 0;
-  let completedTasks = 0;
-  // clear taskList
-  incompleteList.innerHTML = '';
-  completedList.innerHTML = '';
-
-  // Loop through each task in tasks Array
-  for (task of tasks) {
-    // Destructure the task properties
-    const { id, title, isComplete, dueDate } = task;
-
-    // Create Elements
-    const checkBox = document.createElement('input');
-    const checkBoxLabel = document.createElement('label');
-    const titleNode = document.createTextNode(title);
-    const editBtn = document.createElement('i');
-    const deleteBtn = document.createElement('i');
-    const dueDateNode = document.createTextNode(dueDate);
-    const topDiv = document.createElement('div');
-    const bottomDiv = document.createElement('div');
-    const listItem = document.createElement('li');
-
-    // CHECKBOX
-    checkBox.setAttribute('type', 'checkbox');
-    checkBox.classList.add('form-check-input');
-    checkBox.setAttribute('id', 'task' + id);
-    if (isComplete) {
-      checkBox.setAttribute('checked', 'checked');
-    }
-    checkBox.addEventListener('click', function () {
-      toggleComplete(id);
-    });
-
-    // CHECKBOX LABEL
-    checkBoxLabel.setAttribute('for', 'task' + id);
-    checkBoxLabel.appendChild(titleNode);
-    checkBoxLabel.classList.add('form-check-label');
-    if (isComplete) {
-      checkBoxLabel.classList.add('form-check-label-checked');
-    }
-
-    // EDIT BUTTON
-    editBtn.classList.add('far', 'fa-edit');
-    editBtn.classList.add('tasklist-item-editbtn');
-
-    // DELETE BUTTON
-    deleteBtn.classList.add('far', 'fa-trash-alt');
-    deleteBtn.classList.add('tasklist-item-deletebtn');
-    deleteBtn.addEventListener('click', function () {
-      deleteTask(id);
-    });
-    // DUE DATE
-
-    // TOP DIV SECTION
-    topDiv.classList.add('tasklist-item-top');
-    topDiv.appendChild(checkBox);
-    topDiv.appendChild(checkBoxLabel);
-    topDiv.appendChild(editBtn);
-    topDiv.appendChild(deleteBtn);
-
-    // BOTTOM DIV SECTION
-    bottomDiv.classList.add('tasklist-item-bottom');
-    if (dueDate) {
-      bottomDiv.appendChild(dueDateNode);
-    }
-
-    // LIST ITEM
-    listItem.className = 'tasklist-item';
-    listItem.setAttribute('data-id', id);
-    if (isComplete) {
-      listItem.classList.add('tasklist-item-checked');
-    }
-    listItem.appendChild(topDiv);
-    listItem.appendChild(bottomDiv);
-
-    // ADD LIST ITEMS TO COMPLETED OR UNCOMPLETE LIST
-
-    if (isComplete) {
-      completedList.insertBefore(listItem, completedList.childNodes[0]);
-      completedTasks += 1;
+    if (dueDate != '' && dueTime != '') {
+      dueDate = new Date(dueDate + ' ' + dueTime);
+    } else if (dueDate != '') {
+      dueDate = new Date(dueDate);
+    } else if (dueTime != '') {
+      dueDate = new Date();
+      dueDate.setTime(dueTime);
     } else {
-      incompleteList.insertBefore(listItem, incompleteList.childNodes[0]);
-      incompleteTasks += 1;
+      dueDate = null;
+    }
+
+    //if title is not empty
+    if (title != '') {
+      //create new task instance
+      const newTask = new Task(title, details, dueDate);
+      // Add new task instance to taskList Array
+      this.tasks.push(newTask);
+      // Add to localStorage
+      this.saveToLocalStorage();
+      // Clear Input form -- STILL TO ADD
+      document.getElementById('taskForm').reset();
+      // Close Modal
+      toggleModal();
     }
   }
 
-  const accordionCompletedHeading = document.getElementById(
-    'accordion-completed-heading'
-  );
-  accordionCompletedHeading.innerHTML = '';
-  const accordioncCompletedText = document.createTextNode(
-    `Completed Tasks (${completedTasks})`
-  );
-  accordionCompletedHeading.appendChild(accordioncCompletedText);
-}
+  // FUNCTION TO SAVE TASKS TO LOCALSTORAGE
+  saveToLocalStorage() {
+    // save to localStorage
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    // Render Tasklist
+    this.renderTasksList();
+  }
 
-// FUNCTION TO GET TASKS FROM LOCALSTORAGE
-function getFromLocalStorage() {
-  const data = localStorage.getItem('tasks');
-  const idData = localStorage.getItem('idCounter');
-  // if there is data
-  if (data) {
-    // converts back to array and store it in tasks array
-    // Set idCounter to last used ID
-    idCounter = JSON.parse(idData);
-    tasks = JSON.parse(data, function (key, value) {
-      if (key == 'dueDate' && value != null) {
-        return new Date(value);
-      } else {
-        return value;
+  // FUNCTION TO GET TASKS FROM LOCALSTORAGE
+  loadFromLocalStorage() {
+    const data = localStorage.getItem('tasks');
+    // if there is data
+    if (data) {
+      // converts back to array and store it in tasks array
+      this.tasks = JSON.parse(data, function (key, value) {
+        if (key == 'dueDate' && value != null) {
+          return new Date(value);
+        } else {
+          return value;
+        }
+      });
+
+      this.renderTasksList();
+    }
+  }
+
+  // FUNCTION TO READ TASKS TO SCREEN
+  renderTasksList() {
+    let incompleteList = document.getElementById('tasklist-incomplete');
+    let completedList = document.getElementById('tasklist-completed');
+    let incompleteTasks = 0;
+    let completedTasks = 0;
+    // clear taskList
+    incompleteList.innerHTML = '';
+    completedList.innerHTML = '';
+
+    // Loop through each task in tasks Array
+    for (const task of this.tasks) {
+      // Destructure the task properties
+      const { id, title, isComplete, dueDate } = task;
+
+      // Create Elements
+      const checkBox = document.createElement('input');
+      const checkBoxLabel = document.createElement('label');
+      const titleNode = document.createTextNode(title);
+      const editBtn = document.createElement('i');
+      const deleteBtn = document.createElement('i');
+      const dueDateNode = document.createTextNode(dueDate);
+      const topDiv = document.createElement('div');
+      const bottomDiv = document.createElement('div');
+      const listItem = document.createElement('li');
+
+      // CHECKBOX
+      checkBox.setAttribute('type', 'checkbox');
+      checkBox.classList.add('form-check-input');
+      checkBox.setAttribute('id', 'task' + id);
+      if (isComplete) {
+        checkBox.setAttribute('checked', 'checked');
       }
-    });
+      checkBox.addEventListener('click', () => {
+        this.toggleComplete(id);
+      });
 
-    renderTasks(tasks);
-  }
-}
-// initially get everything from localStorage
-getFromLocalStorage();
+      // CHECKBOX LABEL
+      checkBoxLabel.setAttribute('for', 'task' + id);
+      checkBoxLabel.appendChild(titleNode);
+      checkBoxLabel.classList.add('form-check-label');
+      if (isComplete) {
+        checkBoxLabel.classList.add('form-check-label-checked');
+      }
 
-// FUNCTION TO DELETE TASKS
-function deleteTask(id) {
-  tasks = tasks.filter((x) => {
-    return x.id != id;
-  });
-  // update the localStorage
-  addToLocalStorage(tasks);
-}
+      // EDIT BUTTON
+      editBtn.classList.add('far', 'fa-edit');
+      editBtn.classList.add('tasklist-item-editbtn');
 
-// FUNCTION TOGGLE COMPLETE
-function toggleComplete(id) {
-  tasks = tasks.map((item) => {
-    if (item.id == id) {
-      item.isComplete = !item.isComplete;
+      // DELETE BUTTON
+      deleteBtn.classList.add('far', 'fa-trash-alt');
+      deleteBtn.classList.add('tasklist-item-deletebtn');
+      deleteBtn.addEventListener('click', () => {
+        this.deleteTask(id);
+      });
+      // DUE DATE
+
+      // TOP DIV SECTION
+      topDiv.classList.add('tasklist-item-top');
+      topDiv.appendChild(checkBox);
+      topDiv.appendChild(checkBoxLabel);
+      topDiv.appendChild(editBtn);
+      topDiv.appendChild(deleteBtn);
+
+      // BOTTOM DIV SECTION
+      bottomDiv.classList.add('tasklist-item-bottom');
+      if (dueDate) {
+        console.log(dueDate);
+        bottomDiv.appendChild(dueDateNode);
+      }
+
+      // LIST ITEM
+      listItem.className = 'tasklist-item';
+      listItem.setAttribute('data-id', id);
+      if (isComplete) {
+        listItem.classList.add('tasklist-item-checked');
+      }
+      listItem.appendChild(topDiv);
+      listItem.appendChild(bottomDiv);
+
+      // ADD LIST ITEMS TO COMPLETED OR UNCOMPLETE LIST
+
+      if (isComplete) {
+        completedList.insertBefore(listItem, completedList.childNodes[0]);
+        completedTasks += 1;
+      } else {
+        incompleteList.insertBefore(listItem, incompleteList.childNodes[0]);
+        incompleteTasks += 1;
+      }
     }
-    return item;
-  });
-  // update the localStorage
-  addToLocalStorage(tasks);
-}
 
-// FUNCTION TOGGLE COMPLETE
-function filterTasks(value) {
-  switch (value) {
-    case '1':
-      tasks = tasks.sort((a, b) =>
-        a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1
-      );
-      break;
-    case '2':
-      tasks = tasks.sort((a, b) =>
-        a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1
-      );
-      break;
-    case '3':
-      tasks = tasks.sort((a, b) => (a.createdDate > b.createdDate ? 1 : -1));
-      break;
-    case '4':
-      tasks = tasks.sort((a, b) => (a.createdDate < b.createdDate ? 1 : -1));
-      break;
-    default:
-      break;
+    const accordionCompletedHeading = document.getElementById(
+      'accordion-completed-heading'
+    );
+    accordionCompletedHeading.innerHTML = '';
+    const accordioncCompletedText = document.createTextNode(
+      `Completed Tasks (${completedTasks})`
+    );
+    accordionCompletedHeading.appendChild(accordioncCompletedText);
   }
-  addToLocalStorage(tasks);
+
+  // FUNCTION TO DELETE TASKS
+  deleteTask(id) {
+    this.tasks = this.tasks.filter((x) => {
+      return x.id != id;
+    });
+    // update the localStorage
+    this.saveToLocalStorage();
+  }
+
+  // FUNCTION TOGGLE COMPLETE
+  toggleComplete(id) {
+    this.tasks = this.tasks.map((item) => {
+      if (item.id == id) {
+        item.isComplete = !item.isComplete;
+      }
+      return item;
+    });
+    // update the localStorage
+    this.saveToLocalStorage();
+  }
+
+  // FUNCTION TOGGLE COMPLETE
+  filterTasks(value) {
+    switch (value) {
+      case '1':
+        this.tasks = this.tasks.sort((a, b) =>
+          a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1
+        );
+        break;
+      case '2':
+        this.tasks = this.tasks.sort((a, b) =>
+          a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1
+        );
+        break;
+      case '3':
+        this.tasks = this.tasks.sort((a, b) =>
+          a.createdDate > b.createdDate ? 1 : -1
+        );
+        break;
+      case '4':
+        this.tasks = this.tasks.sort((a, b) =>
+          a.createdDate < b.createdDate ? 1 : -1
+        );
+        break;
+      default:
+        break;
+    }
+    this.saveToLocalStorage();
+  }
 }
+todo = new TaskList();
+
+function renderTodaysDate() {
+  let currentDate = new Date();
+  let year = currentDate.getFullYear();
+
+  let dayIndex = currentDate.getDay();
+  let dayArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  let day = dayArray[dayIndex];
+
+  let date = currentDate.getDate();
+
+  let monthIndex = currentDate.getMonth();
+  let monthArray = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  let month = monthArray[monthIndex];
+
+  currentTime = new Date();
+  let hours = currentTime.getHours();
+  if (hours < 10) {
+    hours = '0' + hours;
+  }
+  let minutes = currentTime.getMinutes();
+  if (minutes < 10) {
+    minutes = '0' + minutes;
+  }
+
+  todaysDate = `${day}, ${date} ${month} ${year} ${hours}:${minutes}`;
+
+  return todaysDate;
+}
+document.getElementById('date-today').innerHTML = renderTodaysDate();
 
 // ACCORDION TOGGLE
 function toggleAccordion(button) {
