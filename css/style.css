@@ -1,3 +1,13 @@
+:root{
+  --color-a: #8A4FFF;
+  --color-b: #C3BEF7;
+  --color-c: #E5ECF4;
+  --color-d: #EFFFFA;
+  --color-e: #FFFFFF;
+}
+
+
+
 * {
   margin: 0;
   box-sizing: border-box;
@@ -5,19 +15,19 @@
 }
 body {
   font-family: 'Montserrat', sans-serif;
-  background-color: whitesmoke;
+  background-color: var(--color-e);
 }
 
-.header{
-  background-color: #5264ae;
+.header {
+  background-color: var(--color-a);
   border-bottom: 1px solid grey;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   height: 20vh;
 }
 
 .heading {
   text-align: center;
-  padding: 20px;
+  padding: 10px;
 }
 
 .date{
@@ -190,7 +200,7 @@ input[type='checkbox']:checked + .form-check-label::before {
   box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
 .btn-primary {
-  background: blue;
+  background: var(--color-a);
 }
 .btn-danger {
   background-color: red;
@@ -204,7 +214,7 @@ input[type='checkbox']:checked + .form-check-label::before {
   height: 50px;
   width: 50px;
   border: none;
-  background: blue;
+  background: var(--color-a);
   color: white;
   padding: 15px;
   border-radius: 50%;
@@ -222,7 +232,7 @@ input[type='checkbox']:checked + .form-check-label::before {
 /* ACCORDION */
 
 .accordion {
-  background-color: #eee;
+  background-color: var(--color-b);
   color: #444;
   cursor: pointer;
   padding: 18px;
@@ -272,10 +282,10 @@ input[type='checkbox']:checked + .form-check-label::before {
   box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px, rgba(0, 0, 0, 0.23) 0 3px 6px;
 }
 .tasklist-item:nth-child(odd) {
-  background-color: lightblue;
+  background-color: var(--color-c);
 }
 .tasklist-item:nth-child(even) {
-  background-color: lightgreen;
+  background-color: var(--color-d)
 }
 .tasklist-item-checked {
   opacity: 0.5;
