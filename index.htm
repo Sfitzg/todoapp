@@ -64,16 +64,10 @@
       </div>
     </main>
 
-    <input
-      type="button"
-      id="addTaskButton"
-      class="add-task-button"
-      value="+"
-      onclick="toggleModal()"
-    />
+    <input type="button" id="addTaskButton" class="add-task-button" value="+" />
 
     <!-- Add Task Modal -->
-    <div id="addTaskModal" class="modal">
+    <div id="add-task-modal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
@@ -81,14 +75,13 @@
           <h2 class="form-header">Add New Task</h2>
         </div>
         <div class="modal-body">
-          <form id="taskForm" onsubmit="todo.addTask(event)">
+          <form id="task-input-form">
             <div class="form-group">
               <input
                 class="form-control"
                 id="taskTitle"
                 type="text"
                 placeholder="&nbsp"
-                required
               />
               <span class="highlight"></span>
               <label class="form-label" for="taskTitle">Task Title</label>

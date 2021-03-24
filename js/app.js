@@ -1,82 +1,103 @@
+// CLASS FOR STORAGE
+class Storage {
+  // SAVE TO LOCALSTORAGE
+  static save(key, value) {
+    return localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  // FUNCTION TO GET TASKS FROM LOCALSTORAGE
+  static get(key) {
+    const data = localStorage.getItem(key);
+    return data === null
+      ? null
+      : JSON.parse(data, function (key, value) {
+          if (key == 'dueDate' || (key == 'createdDate' && value != null)) {
+            return new Date(value);
+          } else {
+            return value;
+          }
+        });
+  }
+
+  static unset(key) {
+    if (this.isset(key)) return localStorage.removeItem(key);
+    else return null;
+  }
+
+  static clear() {
+    return localStorage.clear();
+  }
+
+  static isset(key) {
+    return this.get(key) !== null;
+  }
+}
+
 // CLASS FOR TASK
 class Task {
-  constructor(title, details = null, dueDate = null) {
-    this.id = new Date();
-    this.title = title;
+  constructor(
+    id = new Date(),
+    title,
+    details = null,
+    dueDate = null,
+    createdDate = new Date(),
+    isComplete = false
+  ) {
+    this.id = id;
+    this._title = title;
     this.details = details;
     this.dueDate = dueDate;
-    this.createdDate = new Date();
-    this.isComplete = false;
+    this.createdDate = createdDate;
+    this.isComplete = isComplete;
+  }
+
+  get title() {
+    return this._title;
+  }
+
+  set title(value) {
+    this._title = value;
+  }
+
+  // FUNCTION TOGGLE COMPLETE
+  toggleComplete() {
+    this.isComplete = !this.isComplete;
   }
 }
 
 // CLASS FOR TASKLIST
 class TaskList {
   constructor() {
-    // array which stores all the tasks
     this.tasks = [];
-    // initially get everything from localStorage
-    this.loadFromLocalStorage();
-  }
-
-  // FUNCTION TO CREATE TASKS
-  addTask(event) {
-    event.preventDefault();
-    const title = event.target['taskTitle'].value;
-    const details = event.target['taskDetails'].value;
-    const dueTime = event.target['taskDueTime'].value;
-    let dueDate = event.target['taskDueDate'].value;
-
-    if (dueDate != '' && dueTime != '') {
-      dueDate = new Date(dueDate + ' ' + dueTime);
-    } else if (dueDate != '') {
-      dueDate = new Date(dueDate);
-    } else if (dueTime != '') {
-      dueDate = new Date();
-      dueDate.setTime(dueTime);
-    } else {
-      dueDate = null;
-    }
-
-    //if title is not empty
-    if (title != '') {
-      //create new task instance
-      const newTask = new Task(title, details, dueDate);
-      // Add new task instance to taskList Array
-      this.tasks.push(newTask);
-      // Add to localStorage
-      this.saveToLocalStorage();
-      // Clear Input form -- STILL TO ADD
-      document.getElementById('taskForm').reset();
-      // Close Modal
-      toggleModal();
-    }
-  }
-
-  // FUNCTION TO SAVE TASKS TO LOCALSTORAGE
-  saveToLocalStorage() {
-    // save to localStorage
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-    // Render Tasklist
+    // initially get tasks from localStorage and convert back to objects
+    this.convertTasksToObject();
+    // Render the TaskList
     this.renderTasksList();
   }
 
-  // FUNCTION TO GET TASKS FROM LOCALSTORAGE
-  loadFromLocalStorage() {
-    const data = localStorage.getItem('tasks');
-    // if there is data
-    if (data) {
-      // converts back to array and store it in tasks array
-      this.tasks = JSON.parse(data, function (key, value) {
-        if (key == 'dueDate' && value != null) {
-          return new Date(value);
-        } else {
-          return value;
-        }
-      });
-
-      this.renderTasksList();
+  convertTasksToObject() {
+    const retrievedtasks = Storage.get('tasks') || [];
+    for (let task of retrievedtasks) {
+      task = new Task(
+        task.id,
+        task._title,
+        task.details,
+        task.dueDate,
+        task.createdDate,
+        task.isComplete
+      );
+      this.tasks.push(task);
     }
+  }
+
+  // FUNCTION TO CREATE TASKS
+  addTask(task) {
+    // Add task to the array
+    this.tasks.push(task);
+    // Save to localStorage
+    Storage.save('tasks', this.tasks);
+    // Re render Tasklist
+    this.renderTasksList();
   }
 
   // FUNCTION TO READ TASKS TO SCREEN
@@ -113,7 +134,11 @@ class TaskList {
         checkBox.setAttribute('checked', 'checked');
       }
       checkBox.addEventListener('click', () => {
-        this.toggleComplete(id);
+        task.toggleComplete();
+        // Save to localStorage
+        Storage.save('tasks', this.tasks);
+        // Re render Tasklist
+        this.renderTasksList();
       });
 
       // CHECKBOX LABEL
@@ -146,7 +171,6 @@ class TaskList {
       // BOTTOM DIV SECTION
       bottomDiv.classList.add('tasklist-item-bottom');
       if (dueDate) {
-        console.log(dueDate);
         bottomDiv.appendChild(dueDateNode);
       }
 
@@ -178,6 +202,7 @@ class TaskList {
       `Completed Tasks (${completedTasks})`
     );
     accordionCompletedHeading.appendChild(accordioncCompletedText);
+    console.log(this.tasks);
   }
 
   // FUNCTION TO DELETE TASKS
@@ -185,20 +210,10 @@ class TaskList {
     this.tasks = this.tasks.filter((x) => {
       return x.id != id;
     });
-    // update the localStorage
-    this.saveToLocalStorage();
-  }
-
-  // FUNCTION TOGGLE COMPLETE
-  toggleComplete(id) {
-    this.tasks = this.tasks.map((item) => {
-      if (item.id == id) {
-        item.isComplete = !item.isComplete;
-      }
-      return item;
-    });
-    // update the localStorage
-    this.saveToLocalStorage();
+    // Save to localStorage
+    Storage.save('tasks', this.tasks);
+    // Re render Tasklist
+    this.renderTasksList();
   }
 
   // FUNCTION TOGGLE COMPLETE
@@ -227,10 +242,103 @@ class TaskList {
       default:
         break;
     }
-    this.saveToLocalStorage();
+    // Save to localStorage
+    Storage.save('tasks', this.tasks);
+    // Re render Tasklist
+    this.renderTasksList();
   }
 }
 todo = new TaskList();
+
+class FormValidator {
+  static REQUIRED = 'REQUIRED';
+
+  static validate(value, flag, validatorValue) {
+    if (flag === this.REQUIRED) {
+      return value.trim().length > 0;
+    }
+  }
+}
+
+class TaskInputForm {
+  constructor() {
+    this.form = document.getElementById('task-input-form');
+    this.titleInput = document.getElementById('taskTitle');
+    this.detailsInput = document.getElementById('taskDetails');
+    this.dueDateInput = document.getElementById('taskDueDate');
+    this.dueTimeInput = document.getElementById('taskDueTime');
+
+    this.form.addEventListener('submit', this.createTaskHandler.bind(this));
+  }
+
+  createTaskHandler(event) {
+    event.preventDefault();
+    const enteredTitle = this.titleInput.value;
+    const enteredDetails = this.detailsInput.value || null;
+    const enteredDueDate = this.dueDateInput.value || null;
+    const enteredDueTime = this.dueTimeInput.value || null;
+    let taskDue = null;
+
+    // Check if there is a due Date
+    if (enteredDueDate != null && enteredDueTime == null) {
+      taskDue = new Date(enteredDueDate);
+      taskDue.setMinutes(taskDue.getMinutes() + taskDue.getTimezoneOffset());
+    } else if (enteredDueDate != null && enteredDueTime != null) {
+      taskDue = new Date(enteredDueDate + 'T' + enteredDueTime);
+    } else if (enteredDueDate == null && enteredDueTime != null) {
+      taskDue = new Date();
+      // taskDue.setTime('T' + enteredDueTime);
+      console.log(taskDue);
+      // const showDate = taskDue.getDate();
+      // console.log(showDate);
+    }
+
+    if (!FormValidator.validate(enteredTitle, FormValidator.REQUIRED)) {
+      console.log('Invalid - Title is required');
+      return;
+    }
+    // Create newTask
+    const newTask = new Task(
+      (title = enteredTitle),
+      (details = enteredDetails),
+      (dueDate = taskDue)
+    );
+    // Add newTask to TaskList
+    todo.addTask(newTask);
+    // // Clear Input form
+    this.form.reset();
+    // // Close Modal
+    addTaskModal.toggle();
+  }
+}
+new TaskInputForm();
+
+class Modal {
+  constructor(toggle, modalElement) {
+    this.modal = document.querySelector(modalElement);
+    this.modalToggle = document.querySelector(toggle);
+
+    this.modalToggle.addEventListener('click', this.toggle.bind(this));
+    // window.onclick = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.modal.classList.toggle('modal-show');
+  }
+
+  close() {
+    this.modal.classList.remove('modal-show');
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  // window.onclick = function (event) {
+  //   const modal = document.getElementById('addTaskModal');
+  //   if (event.target == modal) {
+  //     modal.classList.toggle('modal-show');
+  //   }
+  // }
+}
+const addTaskModal = new Modal('.add-task-button', '#add-task-modal');
 
 function renderTodaysDate() {
   let currentDate = new Date();
@@ -289,17 +397,3 @@ for (button of acc) {
     toggleAccordion(this);
   });
 }
-
-// TOGGLE THE ADD TASK MODAL
-function toggleModal(type) {
-  const modal = document.getElementById('addTaskModal');
-  modal.classList.toggle('modal-show');
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  const modal = document.getElementById('addTaskModal');
-  if (event.target == modal) {
-    modal.classList.toggle('modal-show');
-  }
-};
