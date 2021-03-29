@@ -118,6 +118,8 @@ class TaskList {
       // Create Elements
       const checkBox = document.createElement('input');
       const checkBoxLabel = document.createElement('label');
+      const checkBoxDiv = document.createElement('div');
+      const titleEl = document.createElement('div');
       const titleNode = document.createTextNode(title);
       const editBtn = document.createElement('i');
       const deleteBtn = document.createElement('i');
@@ -140,18 +142,38 @@ class TaskList {
         // Re render Tasklist
         this.renderTasksList();
       });
-
-      // CHECKBOX LABEL
       checkBoxLabel.setAttribute('for', 'task' + id);
-      checkBoxLabel.appendChild(titleNode);
       checkBoxLabel.classList.add('form-check-label');
+      checkBoxDiv.appendChild(checkBox);
+      checkBoxDiv.appendChild(checkBoxLabel);
+
+      // TITLE
+      titleEl.appendChild(titleNode);
+      titleEl.classList.add('tasklist-item-title');
       if (isComplete) {
-        checkBoxLabel.classList.add('form-check-label-checked');
+        titleEl.classList.add('tasklist-item-title-checked');
       }
+      titleEl.addEventListener('click', () => {
+        const titleInput = document.createElement('input');
+        titleInput.setAttribute('value', title);
+        titleEl.replaceWith(titleInput);
+        titleInput.focus();
+        titleInput.addEventListener('blur', () => {
+          const titleInputValue = titleInput.value;
+          task.title = titleInputValue;
+          // Save to localStorage
+          Storage.save('tasks', this.tasks);
+          // Re render Tasklist
+          this.renderTasksList();
+        });
+      });
 
       // EDIT BUTTON
       editBtn.classList.add('far', 'fa-edit');
       editBtn.classList.add('tasklist-item-editbtn');
+      editBtn.addEventListener('click', () => {
+        console.log('Edit Modal');
+      });
 
       // DELETE BUTTON
       deleteBtn.classList.add('far', 'fa-trash-alt');
@@ -163,8 +185,8 @@ class TaskList {
 
       // TOP DIV SECTION
       topDiv.classList.add('tasklist-item-top');
-      topDiv.appendChild(checkBox);
-      topDiv.appendChild(checkBoxLabel);
+      topDiv.appendChild(checkBoxDiv);
+      topDiv.appendChild(titleEl);
       topDiv.appendChild(editBtn);
       topDiv.appendChild(deleteBtn);
 

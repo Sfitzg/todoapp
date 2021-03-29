@@ -157,9 +157,6 @@ body {
   font-size: 1rem;
   width: 100%;
 }
-.form-check-label-checked {
-  text-decoration: line-through;
-}
 .form-check-label::before {
   font-family: 'Font Awesome 5 free';
   color: green;
@@ -294,6 +291,12 @@ input[type='checkbox']:checked + .form-check-label::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.tasklist-item-title{
+  cursor: pointer;
+}
+.tasklist-item-title-checked {
+    text-decoration: line-through;
 }
 .tasklist-item-editbtn {
   cursor: pointer;
